@@ -11,16 +11,9 @@ class Config:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     SENDER_MAIL ='adhoadhigal@gmail.com'
 
-    @staticmethod
-    def init_app(app):
-        pass
-
-
 class ProdConfig(Config):
         SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-        debug = os.environ.get("DEBUG")
-
-
+        
 class TestConfig(Config):
     # SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://adho:1234@localhost/pitch_test'
     pass
