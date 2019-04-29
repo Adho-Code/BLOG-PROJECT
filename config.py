@@ -20,7 +20,7 @@ class TestConfig(Config):
 
 
 class DevConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://adho:1234localhost/blog'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://adho:1234@localhost/blog'
     DEBUG = True
 
 config_options = {

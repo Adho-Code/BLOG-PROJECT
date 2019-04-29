@@ -1,7 +1,7 @@
 from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
-from .forms import PitchForm,CommentForm,UpdateProfile
-from ..models import User,Pitch,Comment
+from .forms import BlogForm,CommentForm,UpdateProfile
+from ..models import User,Blog,Comment
 from .. import db,photos
 import markdown2
 from flask_login import login_required, current_user
@@ -16,33 +16,34 @@ def index():
     '''
     View root page function that returns the index page and its data
     '''
-    pitches =Pitch.query.order_by(Pitch.date.desc()).all()
+    blogs =Blog.query.order_by(Blog.date.desc()).all()
     title = "My Blog -- Home"
     sambu = random_post()
     quote = sambu["quote"]
     quote_author = sambu ["author"]
-    return render_template('index.html', title = title, pitches = pitches, quote = quote , quote_author=quote_author)
+    return render_template('index.html', title = title, blogs = blogs, quote = quote , quote_author=quote_author)
 
 
-@main.route('/pitches/<category>')
+@main.route('/blogs/<category>')
 def pitches_category(category):
 
-'''
+
+    '''
     View function that returns blogs by category
     '''
     title = f'My Blog -- {category.upper()}'
     if category == "all":
-        pitches = Pitch.query.order_by(Pitch.time.desc())
+        blogs = Blog.query.order_by(Blog.time.desc())
     else:
-        pitches = Pitch.query.filter_by(category=category).order_by(Pitch.time.desc()).all()
+        blogs = Blog.query.filter_by(category=category).order_by(Blog.time.desc()).all()
 
-    return render_template('pitches.html',title = title,pitches = pitches)
+    return render_template('blogs.html',title = title,blogs = blogs)
 
 
-@main.route('/<uname>/new/pitch', methods=['GET','POST'])
+@main.route('/<uname>/new/blog', methods=['GET','POST'])
 @login_required
-def new_pitch(uname):
-    form = PitchForm()
+def new_blog(uname):
+    form = BlogForm()
 
     user = User.query.filter_by(username = uname).first()
 
@@ -61,7 +62,7 @@ def new_pitch(uname):
         time = time[0:5]
         date = str(date)
         date = date[0:10]
-        pitch = Pitch(title=title,
+        blog = Blog(title=title,
                       content=content,
                       category=category,
                       user=current_user,
@@ -71,16 +72,16 @@ def new_pitch(uname):
         db.session.add(pitch)
         db.session.commit()
 
-        return redirect(url_for('main.pitches_category',category = category))
+        return redirect(url_for('main.blogs_category',category = category))
 
-    return render_template('new_pitch.html', title=title_page, form=form)
+    return render_template('new_blog.html', title=title_page, form=form)
 
 
-@main.route("/<uname>/pitch/<pitch_id>/new/comment", methods = ["GET","POST"])
+@main.route("/<uname>/blog/<blog_id>/new/comment", methods = ["GET","POST"])
 @login_required
-def new_comment(uname,pitch_id):
+def new_comment(uname,blog_id):
     user = User.query.filter_by(username = uname).first()
-    pitch = Pitch.query.filter_by(id = pitch_id).first()
+    pitch = Blog.query.filter_by(id = blog_id).first()
 
     form = CommentForm()
     title_page = "My Blog -- Comment Blog"
@@ -93,24 +94,23 @@ def new_comment(uname,pitch_id):
         time = time[0:5]
         date = str(date)
         date = date[0:10]
-        new_comment = Comment(post_comment = comment, user = user, pitch = pitch,time = time, date = date )
+        new_comment = Comment(post_comment = comment, user = user, blog = blog,time = time, date = date )
 
         db.session.add(new_comment)
         db.session.commit()
 
-        return redirect(url_for("main.display_comments", pitch_id=pitch.id))
-    return render_template("new_comment.html", title = title_page,form = form,pitch = pitch)
+        return redirect(url_for("main.display_comments", blog_id=pitch.id))
+    return render_template("new_comment.html", title = title_page,form = form,blog = blog)
 
 
-@main.route("/<pitch_id>/comments")
+@main.route("/<blog_id>/comments")
 @login_required
-def display_comments(pitch_id):
-    # user = User.query.filter_by(username = current_user).first()
-    pitch = Pitch.query.filter_by(id = pitch_id).first()
+def display_comments(blog_id):
+    blog = Blog.query.filter_by(id = blog_id).first()
     title = "My Blog -- Comments"
-    comments = Comment.get_comments(pitch_id)
+    comments = Comment.get_comments(blog_id)
 
-    return render_template("display_comments.html", comments = comments,pitch = pitch,title = title)
+    return render_template("display_comments.html", comments = comments,blog = blog,title = title)
 
 
 

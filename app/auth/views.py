@@ -21,7 +21,7 @@ def login():
 
     flash('Invalid username or password !')
 
-    title = "Pitch-Perfect -- Login Form"
+    title = "Blog-Perfect -- Login Form"
     return render_template('auth/login.html',login_form = login_form,title = title)
 
 
@@ -45,7 +45,7 @@ def register():
 
         return redirect(url_for('auth.login'))
 
-    title = "Pitch-Perfect -- New Account"
+    title = "Blog-Perfect -- New Account"
     return render_template('auth/register.html',registration_form = form, title = title)
 
 

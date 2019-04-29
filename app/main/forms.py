@@ -2,14 +2,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,TextAreaField,SubmitField,SelectField
 from wtforms.validators import Required
 
-class PitchForm(FlaskForm):
+class BlogForm(FlaskForm):
 
     title = StringField('Post title')
     category = SelectField('Post Category', choices=[('Fashion', 'fashion-blog'),
                                                       ('Food', 'food-blog'),
-                                                      ('Travel', 'travel-blogs'),
+                                                      ('Lifestyle', 'lifestyle-blogs'),
                                                       ('Music', 'music-blog'),
-                                                      ('Sports', 'sports-blog'),
+                                                      ('Fitness', 'fitness-blog'),
                                                       ('random', 'random')])
     content = TextAreaField('Type Here')
     submit = SubmitField('Create Post')
