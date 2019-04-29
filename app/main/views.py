@@ -25,7 +25,7 @@ def index():
 
 
 @main.route('/blogs/<category>')
-def pitches_category(category):
+def blogs_category(category):
 
 
     '''
@@ -99,7 +99,7 @@ def new_comment(uname,blog_id):
         db.session.add(new_comment)
         db.session.commit()
 
-        return redirect(url_for("main.display_comments", blog_id=pitch.id))
+        return redirect(url_for("main.display_comments", blog_id=blog.id))
     return render_template("new_comment.html", title = title_page,form = form,blog = blog)
 
 
