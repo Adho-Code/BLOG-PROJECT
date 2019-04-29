@@ -21,7 +21,7 @@ def index():
     sambu = random_post()
     quote = sambu["quote"]
     quote_author = sambu ["author"]
-    return render_template('index.html', title = title, blogs = blogs, quote = quote , quote_author=quote_author)
+    return render_template('index.html', title = title, quote = quote , quote_author=quote_author)
 
 
 @main.route('/blogs/<category>')
@@ -62,14 +62,9 @@ def new_blog(uname):
         time = time[0:5]
         date = str(date)
         date = date[0:10]
-        blog = Blog(title=title,
-                      content=content,
-                      category=category,
-                      user=current_user,
-                      date = date,
-                      time = time)
+        blog = Blog(title=title, content=content,category=category)
 
-        db.session.add(pitch)
+        db.session.add(blog)
         db.session.commit()
 
         return redirect(url_for('main.blogs_category',category = category))
@@ -81,7 +76,7 @@ def new_blog(uname):
 @login_required
 def new_comment(uname,blog_id):
     user = User.query.filter_by(username = uname).first()
-    pitch = Blog.query.filter_by(id = blog_id).first()
+    blog = Blog.query.filter_by(id = blog_id).first()
 
     form = CommentForm()
     title_page = "My Blog -- Comment Blog"
@@ -100,7 +95,7 @@ def new_comment(uname,blog_id):
         db.session.commit()
 
         return redirect(url_for("main.display_comments", blog_id=blog.id))
-    return render_template("new_comment.html", title = title_page,form = form,blog = blog)
+    return render_template("new_comment.html", title = title_page,form = form, blog = blog)
 
 
 @main.route("/<blog_id>/comments")

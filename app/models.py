@@ -61,7 +61,7 @@ class Blog(db.Model):
 
     # display blogs
     @classmethod
-    def get_blods(id):
+    def get_blogs(id):
         blogs = Blog.query.filter_by(category = id).all()
         return blog
 
